@@ -1,5 +1,6 @@
 /// This is copied from Cargokit (which is the official way to use it currently)
 /// Details: https://fzyzcjy.github.io/flutter_rust_bridge/manual/integrate/builtin
+library build_tool.builder;
 
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';

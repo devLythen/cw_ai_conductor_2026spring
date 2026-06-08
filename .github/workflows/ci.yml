@@ -34,6 +34,10 @@ jobs:
       - name: Install Flutter dependencies
         run: flutter pub get
 
+      - name: Install build_tool dependencies
+        working-directory: rust_builder/cargokit/build_tool
+        run: dart pub get
+
       - name: Analyze Flutter project
         run: flutter analyze
 
@@ -65,6 +69,9 @@ jobs:
       - name: Install Flutter dependencies
         run: flutter pub get
 
+      - name: Install build_tool dependencies
+        working-directory: rust_builder/cargokit/build_tool
+        run: dart pub get
       - name: Compute version metadata
         id: version
         shell: bash
