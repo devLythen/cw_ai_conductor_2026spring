@@ -106,6 +106,18 @@ class _MockApi extends RustLibApi {
   }
 }
 
+Future<void> _pumpWideApp(WidgetTester tester) async {
+  tester.view.physicalSize = const Size(1920, 1080);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(() {
+    tester.view.physicalSize = const Size(800, 600);
+    tester.view.devicePixelRatio = 1.0;
+  });
+
+  await tester.pumpWidget(const WinBsodExpertApp());
+  await tester.pump(const Duration(milliseconds: 600));
+}
+
 void main() {
   setUp(() async {
     await RustService.instance.init(api: _MockApi());
@@ -137,8 +149,7 @@ void main() {
   });
 
   testWidgets('Select evidence and run forward diagnosis', (tester) async {
-    await tester.pumpWidget(const WinBsodExpertApp());
-    await tester.pump(const Duration(milliseconds: 600));
+    await _pumpWideApp(tester);
 
     // Tap the 0xD1 evidence chip
     await tester.tap(find.text('\u84dd\u5c4f\u4ee3\u7801 0xD1'));
@@ -159,8 +170,7 @@ void main() {
 
   testWidgets('Forward diagnosis with no matching evidence shows warning',
       (tester) async {
-    await tester.pumpWidget(const WinBsodExpertApp());
-    await tester.pump(const Duration(milliseconds: 600));
+    await _pumpWideApp(tester);
 
     // Select random_crash only (no match in our mock)
     await tester.tap(find.text('\u968f\u673a\u84dd\u5c4f'));
@@ -174,8 +184,7 @@ void main() {
   });
 
   testWidgets('Clear button clears selection and results', (tester) async {
-    await tester.pumpWidget(const WinBsodExpertApp());
-    await tester.pump(const Duration(milliseconds: 600));
+    await _pumpWideApp(tester);
 
     // Select evidence
     await tester.tap(find.text('\u84dd\u5c4f\u4ee3\u7801 0xD1'));
@@ -216,16 +225,7 @@ void main() {
   });
 
   testWidgets('Wide-screen layout shows both panels', (tester) async {
-    // Set a wide viewport
-    tester.view.physicalSize = const Size(1920, 1080);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(() {
-      tester.view.physicalSize = const Size(800, 600);
-      tester.view.devicePixelRatio = 1.0;
-    });
-
-    await tester.pumpWidget(const WinBsodExpertApp());
-    await tester.pump(const Duration(milliseconds: 600));
+    await _pumpWideApp(tester);
 
     // Evidence panel heading and results placeholder both visible
     expect(find.text('\u8bf7\u9009\u62e9\u89c2\u5bdf\u5230\u7684\u8bc1\u636e'),
@@ -273,8 +273,7 @@ void main() {
 
   testWidgets('Backward mode: select goal and run inference shows proof tree',
       (tester) async {
-    await tester.pumpWidget(const WinBsodExpertApp());
-    await tester.pump(const Duration(milliseconds: 600));
+    await _pumpWideApp(tester);
 
     // Switch to backward mode
     await tester.tap(find.text('\u53cd\u5411'));

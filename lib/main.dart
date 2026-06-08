@@ -466,7 +466,7 @@ class _BeltProjector {
         v = _calcV(a, b) {
     final d = b - a;
     if (length3D > 0) {
-      final uy = (d.dy / Sy) / length3D;
+      final uy = (d.dy / sy) / length3D;
       final vy = d.dx / length3D;
       viewDirLocal = Offset(-uy, -vy);
     } else {
@@ -474,11 +474,11 @@ class _BeltProjector {
     }
   }
 
-  static const double Sy = 0.45; // 调整视角：更小的值会使得视角更低，包裹和传送带更立体
+  static const double sy = 0.45; // 调整视角：更小的值会使得视角更低，包裹和传送带更立体
 
   static double _calcL3d(Offset a, Offset b) {
     final d = b - a;
-    return math.sqrt(d.dx * d.dx + (d.dy / Sy) * (d.dy / Sy));
+    return math.sqrt(d.dx * d.dx + (d.dy / sy) * (d.dy / sy));
   }
 
   static Offset _calcU(Offset a, Offset b) {
@@ -492,7 +492,7 @@ class _BeltProjector {
     final d = b - a;
     final l3d = _calcL3d(a, b);
     if (l3d == 0) return Offset.zero;
-    return Offset(-d.dy / Sy, d.dx * Sy) / l3d;
+    return Offset(-d.dy / sy, d.dx * sy) / l3d;
   }
 
   Offset project(double x, double y, double z) {
@@ -687,14 +687,13 @@ class _ConveyorBackgroundPainter extends CustomPainter {
 /// Frosted-glass panel used throughout diagnosis result cards.
 class _GlassPanel extends StatelessWidget {
   final Widget child;
-  final EdgeInsetsGeometry padding;
+  static const EdgeInsetsGeometry _padding = EdgeInsets.all(12);
   final double radius;
   final Color? accentBorder;
   final List<BoxShadow>? shadows;
 
   const _GlassPanel({
     required this.child,
-    this.padding = const EdgeInsets.all(12),
     this.radius = 12,
     this.accentBorder,
     this.shadows,
@@ -707,7 +706,7 @@ class _GlassPanel extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
         child: Container(
-          padding: padding,
+          padding: _padding,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radius),
             border: Border.all(
